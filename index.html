@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ATL Deals - Home</title>
+  <title>ATL Deals | Home</title>
   <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
   <nav class="navbar">
     <div class="nav-inner">
-      <a href="./index.html" class="brand">🔥 ATL Deals</a>
+      <a class="brand" href="./index.html">🔥 ATL Deals</a>
       <div class="nav-links">
         <a href="./index.html" class="active">Home</a>
-        <a href="./deals.html">Deals</a>
+        <a href="./deals.html">Browse Deals</a>
         <a href="./submit.html">Submit Deal</a>
         <a href="./admin.html">Admin</a>
       </div>
@@ -21,57 +21,57 @@
 
   <header class="hero">
     <div class="hero-inner">
-      <span class="hero-badge">Atlanta Local Deals</span>
+      <span class="hero-badge">Atlanta Local Savings</span>
       <h1>Find the best deals in Atlanta</h1>
       <p>
         Discover food, shopping, fitness, and entertainment deals in one place.
       </p>
 
-      <div class="hero-actions">
+      <div class="hero-buttons">
         <a class="btn btn-primary" href="./deals.html">Browse Deals</a>
         <a class="btn btn-secondary" href="./submit.html">Submit a Deal</a>
       </div>
 
-      <div class="stats-grid" id="home-stats">
+      <div class="stats-grid">
         <div class="stat-card">
-          <span class="stat-number" id="stat-total">0</span>
+          <span class="stat-number" id="home-total-deals">0</span>
           <span class="stat-label">Total Deals</span>
         </div>
         <div class="stat-card">
-          <span class="stat-number" id="stat-featured">0</span>
+          <span class="stat-number" id="home-featured-deals">0</span>
           <span class="stat-label">Featured Deals</span>
         </div>
         <div class="stat-card">
-          <span class="stat-number" id="stat-favorites">0</span>
-          <span class="stat-label">Favorites</span>
+          <span class="stat-number">ATL</span>
+          <span class="stat-label">Coverage</span>
         </div>
       </div>
     </div>
   </header>
 
-  <main class="container">
+  <main class="page">
     <section class="section-header">
       <div>
         <h2>Featured Deals</h2>
-        <p>Quick picks from around Atlanta</p>
+        <p>Top picks happening around Atlanta right now.</p>
       </div>
-      <a href="./deals.html" class="text-link">See all deals</a>
+      <a class="text-link" href="./deals.html">See all deals →</a>
     </section>
 
-    <section id="featured-deals" class="deals-grid"></section>
+    <section id="featured-deals-grid" class="deals-grid"></section>
 
     <section class="info-grid">
       <div class="info-card">
-        <h3>Search Fast</h3>
-        <p>Search by title, place, description, or category.</p>
+        <h3>Browse by category</h3>
+        <p>Food, entertainment, shopping, and fitness deals all in one place.</p>
       </div>
       <div class="info-card">
-        <h3>Save Favorites</h3>
-        <p>Mark deals you like and keep track of them in your browser.</p>
+        <h3>Save favorites</h3>
+        <p>Mark deals you like and come back to them later on the browse page.</p>
       </div>
       <div class="info-card">
-        <h3>Submit Deals</h3>
-        <p>Add your own deal ideas with the submit form.</p>
+        <h3>Submit new deals</h3>
+        <p>Use the submit form to add local deals to your site instantly.</p>
       </div>
     </section>
   </main>
