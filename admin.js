@@ -1,98 +1,145 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ATL Deals - Submit Deal</title>
-  <link rel="stylesheet" href="./style.css" />
-</head>
-<body>
-  <nav class="navbar">
-    <div class="nav-inner">
-      <a href="./index.html" class="brand">🔥 ATL Deals</a>
-      <div class="nav-links">
-        <a href="./index.html">Home</a>
-        <a href="./deals.html">Deals</a>
-        <a href="./submit.html" class="active">Submit Deal</a>
-        <a href="./admin.html">Admin</a>
-      </div>
-    </div>
-  </nav>
+const STORAGE_KEY = "atlDealsCustomDeals";
+const FAVORITES_KEY = "atlDealsFavorites";
 
-  <main class="container page-top">
-    <section class="form-wrapper">
-      <div class="section-header">
+const defaultDeals = [
+  {
+    id: "deal-1",
+    title: "50% Off Wings",
+    category: "Food",
+    location: "Atlanta",
+    place: "Wing House",
+    description: "Only available on Tuesdays. Great for a cheap dinner with friends.",
+    expires: "Tuesday only",
+    featured: true,
+    link: "https://example.com",
+    custom: false
+  },
+  {
+    id: "deal-2",
+    title: "$5 Movie Tickets",
+    category: "Entertainment",
+    location: "Atlanta",
+    place: "Local Theater",
+    description: "Discount day special for select showtimes.",
+    expires: "This week",
+    featured: false,
+    link: "https://example.com",
+    custom: false
+  },
+  {
+    id: "deal-3",
+    title: "Gym Membership $10",
+    category: "Fitness",
+    location: "Atlanta",
+    place: "Fit Zone",
+    description: "Limited time promotion for new members.",
+    expires: "Ends soon",
+    featured: false,
+    link: "https://example.com",
+    custom: false
+  },
+  {
+    id: "deal-4",
+    title: "Buy 1 Get 1 Boba",
+    category: "Food",
+    location: "Atlanta",
+    place: "Tea Spot",
+    description: "Buy one drink and get another free after 5 PM.",
+    expires: "Today",
+    featured: true,
+    link: "https://example.com",
+    custom: false
+  },
+  {
+    id: "deal-5",
+    title: "20% Off Sneakers",
+    category: "Shopping",
+    location: "Atlanta",
+    place: "Sneaker Corner",
+    description: "Save on select shoe styles this weekend.",
+    expires: "Weekend only",
+    featured: false,
+    link: "https://example.com",
+    custom: false
+  },
+  {
+    id: "deal-6",
+    title: "Escape Room Group Discount",
+    category: "Entertainment",
+    location: "Atlanta",
+    place: "Puzzle Rooms ATL",
+    description: "Bring 4 or more people and get a lower price per person.",
+    expires: "This month",
+    featured: false,
+    link: "https://example.com",
+    custom: false
+  }
+];
+
+function getCustomDeals() {
+  return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+}
+
+function saveCustomDeals(deals) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(deals));
+}
+
+function getAllDeals() {
+  return [...defaultDeals, ...getCustomDeals()];
+}
+
+function deleteCustomDeal(id) {
+  const updated = getCustomDeals().filter((deal) => deal.id !== id);
+  saveCustomDeals(updated);
+  renderAdminDeals();
+}
+
+function renderAdminDeals() {
+  const list = document.getElementById("admin-deals-list");
+  const emptyState = document.getElementById("admin-empty-state");
+  const countText = document.getElementById("admin-count-text");
+
+  const allDeals = getAllDeals();
+
+  countText.textContent =
+    allDeals.length === 1 ? "1 total deal" : `${allDeals.length} total deals`;
+
+  if (allDeals.length === 0) {
+    list.innerHTML = "";
+    emptyState.classList.remove("hidden");
+    return;
+  }
+
+  emptyState.classList.add("hidden");
+
+  list.innerHTML = allDeals.map((deal) => {
+    return `
+      <div class="admin-item">
         <div>
-          <h1 class="page-title">Submit a Deal</h1>
-          <p>Add a new Atlanta deal to your local site.</p>
+          <h3>${deal.title}</h3>
+          <p><strong>Category:</strong> ${deal.category}</p>
+          <p><strong>Place:</strong> ${deal.place}</p>
+          <p><strong>Location:</strong> ${deal.location}</p>
+          <p><strong>Expires:</strong> ${deal.expires}</p>
+          <p><strong>Type:</strong> ${deal.custom ? "Custom" : "Default"}</p>
+        </div>
+        <div class="card-actions">
+          ${deal.custom ? `<button class="delete-btn" onclick="deleteCustomDeal('${deal.id}')">Delete</button>` : ""}
         </div>
       </div>
+    `;
+  }).join("");
+}
 
-      <form id="deal-form" class="deal-form">
-        <div class="form-grid">
-          <div class="form-group">
-            <label for="title">Deal Title</label>
-            <input type="text" id="title" required />
-          </div>
+document.getElementById("reset-custom-btn").addEventListener("click", () => {
+  localStorage.removeItem(STORAGE_KEY);
+  renderAdminDeals();
+});
 
-          <div class="form-group">
-            <label for="category">Category</label>
-            <select id="category" required>
-              <option value="">Select Category</option>
-              <option value="Food">Food</option>
-              <option value="Entertainment">Entertainment</option>
-              <option value="Fitness">Fitness</option>
-              <option value="Shopping">Shopping</option>
-            </select>
-          </div>
+document.getElementById("reset-all-btn").addEventListener("click", () => {
+  localStorage.removeItem(STORAGE_KEY);
+  localStorage.removeItem(FAVORITES_KEY);
+  renderAdminDeals();
+});
 
-          <div class="form-group">
-            <label for="place">Place</label>
-            <input type="text" id="place" required />
-          </div>
-
-          <div class="form-group">
-            <label for="location">Location</label>
-            <input type="text" id="location" value="Atlanta" required />
-          </div>
-
-          <div class="form-group">
-            <label for="expires">Expires</label>
-            <input type="text" id="expires" placeholder="Example: This week" required />
-          </div>
-
-          <div class="form-group">
-            <label for="link">Deal Link</label>
-            <input type="url" id="link" placeholder="https://example.com" />
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="description">Description</label>
-          <textarea id="description" rows="5" required></textarea>
-        </div>
-
-        <div class="checkbox-row">
-          <label class="checkbox-label">
-            <input type="checkbox" id="featured" />
-            Mark as featured
-          </label>
-        </div>
-
-        <div class="form-actions">
-          <button type="submit" class="btn btn-primary">Save Deal</button>
-          <button type="reset" class="btn btn-secondary">Clear</button>
-        </div>
-
-        <p id="form-message" class="form-message"></p>
-      </form>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <p>© 2026 ATL Deals</p>
-  </footer>
-
-  <script src="./submit.js"></script>
-</body>
-</html>
+renderAdminDeals();
