@@ -3,7 +3,90 @@
 <head>
   <meta charset="UTF-8">
   <title>ATL Deals</title>
-  <link rel="stylesheet" href="./style.css">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+    }
+
+    header {
+      background: #111;
+      color: white;
+      padding: 25px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 28px;
+    }
+
+    header p {
+      color: #ccc;
+      margin-top: 5px;
+    }
+
+    main {
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    #search, #category-filter {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    .deal-card {
+      background: white;
+      padding: 20px;
+      margin-bottom: 15px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .deal-card h2 {
+      margin-bottom: 10px;
+    }
+
+    .deal-card p {
+      margin: 5px 0;
+      color: #555;
+    }
+
+    .deal-card a {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 10px 14px;
+      background: #007bff;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      transition: 0.2s;
+    }
+
+    .deal-card a:hover {
+      background: #0056b3;
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px;
+      background: #111;
+      color: white;
+      margin-top: 30px;
+    }
+  </style>
 </head>
 
 <body>
@@ -16,6 +99,13 @@
   <main>
     <input type="text" id="search" placeholder="Search deals...">
 
+    <select id="category-filter">
+      <option value="all">All Categories</option>
+      <option value="Food">Food</option>
+      <option value="Entertainment">Entertainment</option>
+      <option value="Fitness">Fitness</option>
+    </select>
+
     <div id="deals-container"></div>
   </main>
 
@@ -23,6 +113,77 @@
     <p>© 2026 ATL Deals</p>
   </footer>
 
-  <script src="./script.js"></script>
+  <script>
+    const deals = [
+      {
+        title: "50% Off Wings",
+        category: "Food",
+        location: "Atlanta",
+        description: "Only available on Tuesdays",
+        link: "#"
+      },
+      {
+        title: "$5 Movie Tickets",
+        category: "Entertainment",
+        location: "Atlanta",
+        description: "Discount day special",
+        link: "#"
+      },
+      {
+        title: "Gym Membership $10",
+        category: "Fitness",
+        location: "Atlanta",
+        description: "Limited time promotion",
+        link: "#"
+      }
+    ];
+
+    const container = document.getElementById("deals-container");
+    const searchInput = document.getElementById("search");
+    const categoryFilter = document.getElementById("category-filter");
+
+    function displayDeals(filteredDeals) {
+      container.innerHTML = "";
+
+      filteredDeals.forEach(deal => {
+        const div = document.createElement("div");
+        div.className = "deal-card";
+
+        div.innerHTML = `
+          <h2>${deal.title}</h2>
+          <p><strong>${deal.category}</strong></p>
+          <p>${deal.description}</p>
+          <p><strong>Location:</strong> ${deal.location}</p>
+          <a href="${deal.link}" target="_blank">View Deal</a>
+        `;
+
+        container.appendChild(div);
+      });
+    }
+
+    function filterDeals() {
+      const searchTerm = searchInput.value.toLowerCase();
+      const category = categoryFilter.value;
+
+      const filtered = deals.filter(deal => {
+        const matchesSearch =
+          deal.title.toLowerCase().includes(searchTerm) ||
+          deal.description.toLowerCase().includes(searchTerm);
+
+        const matchesCategory =
+          category === "all" || deal.category === category;
+
+        return matchesSearch && matchesCategory;
+      });
+
+      displayDeals(filtered);
+    }
+
+    searchInput.addEventListener("input", filterDeals);
+    categoryFilter.addEventListener("change", filterDeals);
+
+    displayDeals(deals);
+  </script>
+
 </body>
 </html>
