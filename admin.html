@@ -1,1 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ATL Deals | Admin</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a class="brand" href="./index.html">🔥 ATL Deals</a>
+      <div class="nav-links">
+        <a href="./index.html">Home</a>
+        <a href="./deals.html">Browse Deals</a>
+        <a href="./submit.html">Submit Deal</a>
+        <a href="./admin.html" class="active">Admin</a>
+      </div>
+    </div>
+  </nav>
 
+  <main class="page">
+    <section class="browse-header">
+      <h1>Admin Panel</h1>
+      <p>View all deals, remove custom deals, and reset local data.</p>
+    </section>
+
+    <section class="admin-actions">
+      <button class="btn btn-secondary" id="reset-custom-btn">Reset Custom Deals</button>
+      <button class="btn btn-danger" id="reset-all-btn">Reset All Local Data</button>
+    </section>
+
+    <section class="section-header">
+      <div>
+        <h2>All Deals</h2>
+        <p id="admin-count-text">Loading deals...</p>
+      </div>
+    </section>
+
+    <section id="admin-deals-list" class="admin-list"></section>
+
+    <div id="admin-empty-state" class="empty-state hidden">
+      <h3>No deals available</h3>
+      <p>Add a deal from the submit page.</p>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>© 2026 ATL Deals</p>
+  </footer>
+
+  <script src="./admin.js"></script>
+</body>
+</html>
