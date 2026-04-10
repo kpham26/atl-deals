@@ -3,32 +3,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ATL Deals - Browse Deals</title>
+  <title>ATL Deals | Browse</title>
   <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
   <nav class="navbar">
     <div class="nav-inner">
-      <a href="./index.html" class="brand">🔥 ATL Deals</a>
+      <a class="brand" href="./index.html">🔥 ATL Deals</a>
       <div class="nav-links">
         <a href="./index.html">Home</a>
-        <a href="./deals.html" class="active">Deals</a>
+        <a href="./deals.html" class="active">Browse Deals</a>
         <a href="./submit.html">Submit Deal</a>
         <a href="./admin.html">Admin</a>
       </div>
     </div>
   </nav>
 
-  <main class="container page-top">
-    <section class="section-header">
-      <div>
-        <h1 class="page-title">Browse Deals</h1>
-        <p id="results-text">Showing all deals</p>
-      </div>
+  <main class="page">
+    <section class="browse-header">
+      <h1>Browse Deals</h1>
+      <p>Search, filter, sort, and save your favorite Atlanta deals.</p>
     </section>
 
-    <section class="controls">
-      <input type="text" id="search" placeholder="Search deals, places, descriptions..." />
+    <section class="controls-panel">
+      <input type="text" id="search" placeholder="Search deals, places, or categories..." />
 
       <select id="category-filter">
         <option value="all">All Categories</option>
@@ -44,22 +42,34 @@
         <option value="title-desc">Sort: Z to A</option>
         <option value="featured-first">Sort: Featured First</option>
       </select>
+
+      <select id="view-filter">
+        <option value="all">Show: All Deals</option>
+        <option value="favorites">Show: Favorites Only</option>
+      </select>
     </section>
 
-    <section class="quick-filters">
+    <section class="chip-row">
       <button class="chip active" data-category="all">All</button>
       <button class="chip" data-category="Food">Food</button>
       <button class="chip" data-category="Entertainment">Entertainment</button>
       <button class="chip" data-category="Fitness">Fitness</button>
       <button class="chip" data-category="Shopping">Shopping</button>
-      <button class="chip" id="favorites-only-btn" data-mode="all">Favorites Only: Off</button>
     </section>
 
-    <section id="deals-container" class="deals-grid"></section>
+    <section class="section-header">
+      <div>
+        <h2>Available Deals</h2>
+        <p id="results-text">Showing all deals</p>
+      </div>
+      <button class="btn btn-secondary btn-small" id="clear-favorites-btn">Clear Favorites</button>
+    </section>
+
+    <section id="deals-grid" class="deals-grid"></section>
 
     <div id="empty-state" class="empty-state hidden">
       <h3>No deals found</h3>
-      <p>Try changing your search or filters.</p>
+      <p>Try another search, category, or view filter.</p>
     </div>
   </main>
 
