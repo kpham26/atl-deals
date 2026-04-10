@@ -3,73 +3,77 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ATL Deals</title>
+  <title>ATL Deals - Home</title>
   <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="./index.html" class="brand">🔥 ATL Deals</a>
+      <div class="nav-links">
+        <a href="./index.html" class="active">Home</a>
+        <a href="./deals.html">Deals</a>
+        <a href="./submit.html">Submit Deal</a>
+        <a href="./admin.html">Admin</a>
+      </div>
+    </div>
+  </nav>
+
   <header class="hero">
     <div class="hero-inner">
-      <div class="brand-row">
-        <span class="logo">🔥</span>
-        <h1>ATL Deals</h1>
-      </div>
-      <p class="tagline">Find the best food, entertainment, fitness, and shopping deals in Atlanta.</p>
+      <span class="hero-badge">Atlanta Local Deals</span>
+      <h1>Find the best deals in Atlanta</h1>
+      <p>
+        Discover food, shopping, fitness, and entertainment deals in one place.
+      </p>
 
-      <div class="stats">
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="./deals.html">Browse Deals</a>
+        <a class="btn btn-secondary" href="./submit.html">Submit a Deal</a>
+      </div>
+
+      <div class="stats-grid" id="home-stats">
         <div class="stat-card">
-          <span class="stat-number" id="deal-count">0</span>
-          <span class="stat-label">Deals</span>
+          <span class="stat-number" id="stat-total">0</span>
+          <span class="stat-label">Total Deals</span>
         </div>
         <div class="stat-card">
-          <span class="stat-number">ATL</span>
-          <span class="stat-label">Location</span>
+          <span class="stat-number" id="stat-featured">0</span>
+          <span class="stat-label">Featured Deals</span>
         </div>
         <div class="stat-card">
-          <span class="stat-number">Daily</span>
-          <span class="stat-label">Updated</span>
+          <span class="stat-number" id="stat-favorites">0</span>
+          <span class="stat-label">Favorites</span>
         </div>
       </div>
     </div>
   </header>
 
   <main class="container">
-    <section class="controls">
-      <input type="text" id="search" placeholder="Search deals, places, or categories..." />
-
-      <select id="category-filter">
-        <option value="all">All Categories</option>
-        <option value="Food">Food</option>
-        <option value="Entertainment">Entertainment</option>
-        <option value="Fitness">Fitness</option>
-        <option value="Shopping">Shopping</option>
-      </select>
-
-      <select id="sort-filter">
-        <option value="default">Sort: Default</option>
-        <option value="title-asc">Sort: A to Z</option>
-        <option value="title-desc">Sort: Z to A</option>
-      </select>
-    </section>
-
-    <section class="quick-filters">
-      <button class="chip active" data-category="all">All</button>
-      <button class="chip" data-category="Food">Food</button>
-      <button class="chip" data-category="Entertainment">Entertainment</button>
-      <button class="chip" data-category="Fitness">Fitness</button>
-      <button class="chip" data-category="Shopping">Shopping</button>
-    </section>
-
     <section class="section-header">
-      <h2>Available Deals</h2>
-      <p id="results-text">Showing all deals</p>
+      <div>
+        <h2>Featured Deals</h2>
+        <p>Quick picks from around Atlanta</p>
+      </div>
+      <a href="./deals.html" class="text-link">See all deals</a>
     </section>
 
-    <section id="deals-container" class="deals-grid"></section>
+    <section id="featured-deals" class="deals-grid"></section>
 
-    <div id="empty-state" class="empty-state hidden">
-      <h3>No deals found</h3>
-      <p>Try a different search or category.</p>
-    </div>
+    <section class="info-grid">
+      <div class="info-card">
+        <h3>Search Fast</h3>
+        <p>Search by title, place, description, or category.</p>
+      </div>
+      <div class="info-card">
+        <h3>Save Favorites</h3>
+        <p>Mark deals you like and keep track of them in your browser.</p>
+      </div>
+      <div class="info-card">
+        <h3>Submit Deals</h3>
+        <p>Add your own deal ideas with the submit form.</p>
+      </div>
+    </section>
   </main>
 
   <footer class="footer">
