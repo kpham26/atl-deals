@@ -1,5 +1,9 @@
-const deals = [
+const STORAGE_KEY = "atlDealsCustomDeals";
+const FAVORITES_KEY = "atlDealsFavorites";
+
+const defaultDeals = [
   {
+    id: "deal-1",
     title: "50% Off Wings",
     category: "Food",
     location: "Atlanta",
@@ -7,9 +11,11 @@ const deals = [
     description: "Only available on Tuesdays. Great for a cheap dinner with friends.",
     expires: "Tuesday only",
     featured: true,
-    link: "#"
+    link: "https://example.com",
+    custom: false
   },
   {
+    id: "deal-2",
     title: "$5 Movie Tickets",
     category: "Entertainment",
     location: "Atlanta",
@@ -17,9 +23,11 @@ const deals = [
     description: "Discount day special for select showtimes.",
     expires: "This week",
     featured: false,
-    link: "#"
+    link: "https://example.com",
+    custom: false
   },
   {
+    id: "deal-3",
     title: "Gym Membership $10",
     category: "Fitness",
     location: "Atlanta",
@@ -27,9 +35,11 @@ const deals = [
     description: "Limited time promotion for new members.",
     expires: "Ends soon",
     featured: false,
-    link: "#"
+    link: "https://example.com",
+    custom: false
   },
   {
+    id: "deal-4",
     title: "Buy 1 Get 1 Boba",
     category: "Food",
     location: "Atlanta",
@@ -37,9 +47,11 @@ const deals = [
     description: "Buy one drink and get another free after 5 PM.",
     expires: "Today",
     featured: true,
-    link: "#"
+    link: "https://example.com",
+    custom: false
   },
   {
+    id: "deal-5",
     title: "20% Off Sneakers",
     category: "Shopping",
     location: "Atlanta",
@@ -47,9 +59,11 @@ const deals = [
     description: "Save on select shoe styles this weekend.",
     expires: "Weekend only",
     featured: false,
-    link: "#"
+    link: "https://example.com",
+    custom: false
   },
   {
+    id: "deal-6",
     title: "Escape Room Group Discount",
     category: "Entertainment",
     location: "Atlanta",
@@ -57,22 +71,43 @@ const deals = [
     description: "Bring 4 or more people and get a lower price per person.",
     expires: "This month",
     featured: false,
-    link: "#"
+    link: "https://example.com",
+    custom: false
   }
 ];
 
-const container = document.getElementById("deals-container");
-const searchInput = document.getElementById("search");
-const categoryFilter = document.getElementById("category-filter");
-const sortFilter = document.getElementById("sort-filter");
-const resultsText = document.getElementById("results-text");
-const dealCount = document.getElementById("deal-count");
-const emptyState = document.getElementById("empty-state");
-const chips = document.querySelectorAll(".chip");
+function getCustomDeals() {
+  return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+}
 
-dealCount.textContent = deals.length;
+function getAllDeals() {
+  return [...defaultDeals, ...getCustomDeals()];
+}
+
+function getFavorites() {
+  return JSON.parse(localStorage.getItem(FAVORITES_KEY)) || [];
+}
+
+function saveFavorites(favorites) {
+  localStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites));
+}
+
+function toggleFavorite(id) {
+  const favorites = getFavorites();
+  const exists = favorites.includes(id);
+
+  const updated = exists
+    ? favorites.filter((favId) => favId !== id)
+    : [...favorites, id];
+
+  saveFavorites(updated);
+  renderDealsPage();
+}
 
 function createDealCard(deal) {
+  const favorites = getFavorites();
+  const isFavorite = favorites.includes(deal.id);
+
   return `
     <article class="deal-card">
       <div class="card-top">
@@ -93,79 +128,117 @@ function createDealCard(deal) {
 
       <div class="card-bottom">
         <span class="expire-text">Expires: ${deal.expires}</span>
-        <a class="deal-link" href="${deal.link}" target="_blank">View Deal</a>
+        <div class="card-actions">
+          <button class="favorite-btn" onclick="toggleFavorite('${deal.id}')">
+            ${isFavorite ? "★ Favorited" : "☆ Favorite"}
+          </button>
+          <a class="deal-link" href="${deal.link || "#"}" target="_blank">View Deal</a>
+        </div>
       </div>
     </article>
   `;
 }
 
-function getFilteredDeals() {
+function renderHomePage() {
+  const featuredGrid = document.getElementById("featured-deals-grid");
+  const totalDealsEl = document.getElementById("home-total-deals");
+  const featuredDealsEl = document.getElementById("home-featured-deals");
+
+  if (!featuredGrid) return;
+
+  const deals = getAllDeals();
+  const featuredDeals = deals.filter((deal) => deal.featured).slice(0, 4);
+
+  totalDealsEl.textContent = deals.length;
+  featuredDealsEl.textContent = featuredDeals.length;
+
+  featuredGrid.innerHTML = featuredDeals.map(createDealCard).join("");
+}
+
+function renderDealsPage() {
+  const dealsGrid = document.getElementById("deals-grid");
+  if (!dealsGrid) return;
+
+  const searchInput = document.getElementById("search");
+  const categoryFilter = document.getElementById("category-filter");
+  const sortFilter = document.getElementById("sort-filter");
+  const viewFilter = document.getElementById("view-filter");
+  const resultsText = document.getElementById("results-text");
+  const emptyState = document.getElementById("empty-state");
+  const chips = document.querySelectorAll(".chip");
+
+  const allDeals = getAllDeals();
+  const favorites = getFavorites();
+
   const searchTerm = searchInput.value.toLowerCase().trim();
   const category = categoryFilter.value;
   const sort = sortFilter.value;
+  const view = viewFilter.value;
 
-  let filtered = deals.filter((deal) => {
+  let filtered = allDeals.filter((deal) => {
     const matchesSearch =
       deal.title.toLowerCase().includes(searchTerm) ||
       deal.description.toLowerCase().includes(searchTerm) ||
       deal.place.toLowerCase().includes(searchTerm) ||
       deal.category.toLowerCase().includes(searchTerm);
 
-    const matchesCategory =
-      category === "all" || deal.category === category;
+    const matchesCategory = category === "all" || deal.category === category;
+    const matchesView = view === "all" || favorites.includes(deal.id);
 
-    return matchesSearch && matchesCategory;
+    return matchesSearch && matchesCategory && matchesView;
   });
 
   if (sort === "title-asc") {
     filtered.sort((a, b) => a.title.localeCompare(b.title));
   } else if (sort === "title-desc") {
     filtered.sort((a, b) => b.title.localeCompare(a.title));
+  } else if (sort === "featured-first") {
+    filtered.sort((a, b) => Number(b.featured) - Number(a.featured));
   }
 
-  return filtered;
-}
-
-function renderDeals() {
-  const filteredDeals = getFilteredDeals();
-
-  container.innerHTML = filteredDeals.map(createDealCard).join("");
-
+  dealsGrid.innerHTML = filtered.map(createDealCard).join("");
   resultsText.textContent =
-    filteredDeals.length === 1
-      ? "Showing 1 deal"
-      : `Showing ${filteredDeals.length} deals`;
+    filtered.length === 1 ? "Showing 1 deal" : `Showing ${filtered.length} deals`;
 
-  if (filteredDeals.length === 0) {
+  if (filtered.length === 0) {
     emptyState.classList.remove("hidden");
   } else {
     emptyState.classList.add("hidden");
   }
-}
-
-function setCategory(category) {
-  categoryFilter.value = category;
 
   chips.forEach((chip) => {
     chip.classList.toggle("active", chip.dataset.category === category);
   });
-
-  renderDeals();
 }
 
-searchInput.addEventListener("input", renderDeals);
-categoryFilter.addEventListener("change", () => {
+function setupDealsPageEvents() {
+  const searchInput = document.getElementById("search");
+  const categoryFilter = document.getElementById("category-filter");
+  const sortFilter = document.getElementById("sort-filter");
+  const viewFilter = document.getElementById("view-filter");
+  const clearFavoritesBtn = document.getElementById("clear-favorites-btn");
+  const chips = document.querySelectorAll(".chip");
+
+  if (!searchInput) return;
+
+  searchInput.addEventListener("input", renderDealsPage);
+  categoryFilter.addEventListener("change", renderDealsPage);
+  sortFilter.addEventListener("change", renderDealsPage);
+  viewFilter.addEventListener("change", renderDealsPage);
+
+  clearFavoritesBtn.addEventListener("click", () => {
+    localStorage.removeItem(FAVORITES_KEY);
+    renderDealsPage();
+  });
+
   chips.forEach((chip) => {
-    chip.classList.toggle("active", chip.dataset.category === categoryFilter.value);
+    chip.addEventListener("click", () => {
+      categoryFilter.value = chip.dataset.category;
+      renderDealsPage();
+    });
   });
-  renderDeals();
-});
-sortFilter.addEventListener("change", renderDeals);
+}
 
-chips.forEach((chip) => {
-  chip.addEventListener("click", () => {
-    setCategory(chip.dataset.category);
-  });
-});
-
-renderDeals();
+renderHomePage();
+setupDealsPageEvents();
+renderDealsPage();
